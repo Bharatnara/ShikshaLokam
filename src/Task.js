@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Task = ({
   title,
@@ -7,9 +8,10 @@ const Task = ({
   onEdit,
   onDelete,
   toggleStatus,
-  index
+  index,
 }) => {
   const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
+  const navigate = useNavigate();
 
   const handleDeleteClick = (e) => {
     e.preventDefault();
@@ -27,6 +29,7 @@ const Task = ({
     e.preventDefault();
     e.stopPropagation();
     onEdit(index);
+    navigate("/edit-task"); // Use navigate to redirect
   };
 
   return (
@@ -37,9 +40,9 @@ const Task = ({
         aria-current="true"
       >
         <div className="d-flex w-100 justify-content-between ">
-          <h5 className="mb-1">{title || 'No Title'}</h5>
+          <h5 className="mb-1">{title || "No Title"}</h5>
           <small>
-          <button
+            <button
               className="btn btn-sm btn-secondary me-2"
               onClick={handleEditClick}
             >
@@ -55,16 +58,22 @@ const Task = ({
         </div>
         <p className="mb-1">{description}</p>
         <small>Status: {status ? "Completed" : "Pending"}</small>
-        <li class="list-group-item">
+        <li
+          className="list-group-item"
+          style={{
+            backgroundColor: status ? "#63BC50" : "inherit",
+            color: status ? "white" : "inherit",
+          }}
+        >
           <input
-            class="form-check-input me-2"
+            className="form-check-input me-2"
             type="checkbox"
             checked={status}
             value=""
             id="firstCheckbox"
             onChange={handleToggleStatus}
           />
-          <label class="form-check-label" for="firstCheckbox">
+          <label className="form-check-label" htmlFor="firstCheckbox">
             Mark as completed
           </label>
         </li>

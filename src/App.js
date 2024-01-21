@@ -1,9 +1,9 @@
-// App.js
-
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import "./App.css";
 import List from "./list";
 import useTaskService from "./TaskService";
+import EditTaskPage from "./editTaskPage";
 
 function App() {
   const { getAllTasks, addTask, updateTask, deleteTask } = useTaskService();
@@ -46,33 +46,6 @@ function App() {
     setIsEditFormVisible(true);
   };
 
-  const handleEditInput = (e) => {
-    const { name, value } = e.target;
-    setEditTask((prev) => ({
-      ...prev,
-      task: {
-        ...prev.task,
-        [name]: value,
-      },
-    }));
-  };
-
-  const saveEdit = () => {
-    updateTask(editTask.index, editTask.task);
-    setTasks((prevTasks) => {
-        const updatedTasks = [...prevTasks];
-        updatedTasks[editTask.index] = editTask.task;
-        return updatedTasks;
-    });
-    setEditTask(null);
-    setIsEditFormVisible(false);
-};
-
-  const cancelEdit = () => {
-    setEditTask(null);
-    setIsEditFormVisible(false);
-  };
-
   const handleDelete = (index) => {
     setDeleteTaskIndex(index);
     setIsConfirmationVisible(true);
@@ -98,102 +71,95 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1 className="brand">Task Management App</h1>
-      <div className="content-container">
-        <div className="addtaskform">
-        <h3 className="addtaskbrand">Add Task</h3>
-          <form>
-            <div className="row mb-3">
-              <label className="col-sm-2 col-form-label">Title</label>
-              <div className="col-sm-10">
-                <input
-                  type="text"
-                  name="title"
-                  value={newTask.title}
-                  placeholder="Task Title"
-                  onChange={handleInputChange}
-                  className="form-control"
-                  id="inputEmail3"
-                />
+    <Router>
+      <div className="App">
+        <h1 className="brand">Task Management App</h1>
+        <div className="content-container">
+          <div className="addtaskform">
+            <h3 className="addtaskbrand">Add Task</h3>
+            <form>
+              <div className="row mb-3">
+                <label className="form-label">Title</label>
+                <div>
+                  <input
+                    type="text"
+                    name="title"
+                    value={newTask.title}
+                    placeholder="Task Title"
+                    onChange={handleInputChange}
+                    className="form-control"
+                    id="inputEmail3"
+                  />
+                </div>
               </div>
-            </div>
-            <div className="row mb-3">
-              <label className="col-sm-2 col-form-label">Description</label>
-              <div className="col-sm-10">
-                <textarea
-                  type="text"
-                  name="description"
-                  value={newTask.description}
-                  placeholder="Task Description"
-                  onChange={handleInputChange}
-                  className="form-control"
-                  rows="3"
-                ></textarea>
+              <div className="row mb-3">
+                <label className="form-label">Description</label>
+                <div>
+                  <textarea
+                    type="text"
+                    name="description"
+                    value={newTask.description}
+                    placeholder="Task Description"
+                    onChange={handleInputChange}
+                    className="form-control"
+                    rows="3"
+                  ></textarea>
+                </div>
               </div>
-            </div>
 
-            <br />
-            <button
-              type="button"
-              className="btn btn-light btn-lg"
-              onClick={AddTask}
-            >
-              Add Task
-            </button>
-          </form>
-        </div>
+              <br />
+              <button
+                type="button"
+                className="btn btn-light btn-lg"
+                onClick={AddTask}
+              >
+                Add Task
+              </button>
+            </form>
+          </div>
 
-        <div className="list-container">
-          <List
-            tasks={tasks}
-            onEdit={(index, task) => handleEdit(index, task)}
-            onDelete={(index) => handleDelete(index)}
-            toggleStatus={toggleStatus}
-          />
+          <div className="list-container">
+            <List
+              tasks={tasks}
+              onEdit={(index, task) => handleEdit(index, task)}
+              onDelete={(index) => handleDelete(index)}
+              toggleStatus={toggleStatus}
+            />
+
+            <Routes>
+              <Route
+                path="/edit-task"
+                element={
+                  isEditFormVisible && (
+                    <EditTaskPage
+                      editTask={editTask}
+                      saveEdit={(editedTask) => {
+                        updateTask(editTask.index, editedTask);
+                        setTasks(getAllTasks());
+                        setEditTask(null);
+                        setIsEditFormVisible(false);
+                      }}
+                      cancelEdit={() => {
+                        setEditTask(null);
+                        setIsEditFormVisible(false);
+                      }}
+                    />
+                  )
+                }
+              />
+            </Routes>
+
+            {isConfirmationVisible && (
+              <div>
+                <p>Are you sure you want to delete this task..?</p>
+                <button onClick={confirmDelete}>Yes</button>
+                <button onClick={cancelDelete}>No</button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-
-      {isEditFormVisible && (
-        <div>
-          <h3>Edit Task</h3>
-          <label>
-            Title:
-            <input
-              type="text"
-              name="title"
-              defaultValue={editTask?.task?.title}
-              onChange={handleEditInput}
-            />
-          </label>
-          <br />
-          <label>
-            Description:
-            <input
-              type="text"
-              name="description"
-              defaultValue={editTask?.task?.description}
-              onChange={handleEditInput}
-            />
-          </label>
-          <br />
-          <button type="button" onClick={saveEdit}>
-            Save
-          </button>
-          <button type="button" onClick={cancelEdit}>
-            Cancel
-          </button>
-        </div>
-      )}
-
-      {isConfirmationVisible && (
-        <div>
-          <p>Are you sure you want to delete this task..?</p>
-          <button onClick={confirmDelete}>Yes</button>
-          <button onClick={cancelDelete}>No</button>
-        </div>
-      )}
-    </div>
+    </Router>
   );
 }
 
