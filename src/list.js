@@ -3,7 +3,7 @@ import Task from "./Task";
 
 const List = ({tasks, onEdit, onDelete, toggleStatus}) => {
     return (
-        <div>
+        <div className="list">
             <h3>Task List</h3>
             {tasks.length === 0 ? (
                 <p>Great Work! You have no pending tasks.</p>

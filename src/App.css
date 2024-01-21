@@ -1,44 +1,59 @@
+/* App.css */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
 .App {
   text-align: center;
+  background-color: #F4F4F4;
+  font-family: "Ubuntu", sans-serif;
+  height: 100%;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.brand {
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  padding-top: 40px;
+  background-color: #A43E27;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.content-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.addtaskform {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  margin-right: 20px;
+}
+
+.addtaskbrand{
+  margin-bottom: 30px;
+}
+
+.list-container {
+  width: 100%;
+  max-width: 600px;
+}
+
+.task {
+  text-align: left;
 }
 
 .completed-task {
-  background-color: #e8f5e9; /* Light green background for completed tasks */
+  background-color: #e8f5e9;
   padding: 10px;
   margin: 5px 0;
+}
+
+.btn{
+  background-color: #63BC50;
 }

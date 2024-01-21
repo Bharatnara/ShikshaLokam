@@ -7,21 +7,15 @@ const Task = ({
   onEdit,
   onDelete,
   toggleStatus,
+  index
 }) => {
   const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
 
   const handleDeleteClick = (e) => {
+    e.preventDefault();
     e.stopPropagation();
+    onDelete(index);
     setIsConfirmationVisible(true);
-  };
-
-  const confirmDelete = () => {
-    onDelete();
-    setIsConfirmationVisible(false);
-  };
-
-  const cancelDelete = () => {
-    setIsConfirmationVisible(false);
   };
 
   const handleToggleStatus = (e) => {
@@ -29,26 +23,52 @@ const Task = ({
     toggleStatus();
   };
 
+  const handleEditClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onEdit(index);
+  };
+
   return (
-    <div onClick={onEdit} className={status ? 'completed-task' : ''}>
-      <h3>{title}</h3>
-      <p>{description}</p>
-      <p>Status: {status ? "Completed" : "Pending"}</p>
-      <input
-        type="checkbox"
-        checked={status}
-        onChange={handleToggleStatus}
-        style={{ marginRight: "5px" }}
-      />
-      Mark as Completed
-      <button onClick={handleDeleteClick}>Delete</button>
-      {isConfirmationVisible && (
-        <div>
-          <p>Are you sure you want to delete this task..?</p>
-          <button onClick={confirmDelete}>Yes</button>
-          <button onClick={cancelDelete}>No</button>
+    <div className="list-group p-3 m-1 border-1 bd-example m-1 border-0 task ">
+      <a
+        href="/"
+        className="list-group-item list-group-item-action "
+        aria-current="true"
+      >
+        <div className="d-flex w-100 justify-content-between ">
+          <h5 className="mb-1">{title || 'No Title'}</h5>
+          <small>
+          <button
+              className="btn btn-sm btn-secondary me-2"
+              onClick={handleEditClick}
+            >
+              Edit
+            </button>
+            <button
+              className="btn btn-sm btn-secondary"
+              onClick={handleDeleteClick}
+            >
+              Delete
+            </button>
+          </small>
         </div>
-      )}
+        <p className="mb-1">{description}</p>
+        <small>Status: {status ? "Completed" : "Pending"}</small>
+        <li class="list-group-item">
+          <input
+            class="form-check-input me-2"
+            type="checkbox"
+            checked={status}
+            value=""
+            id="firstCheckbox"
+            onChange={handleToggleStatus}
+          />
+          <label class="form-check-label" for="firstCheckbox">
+            Mark as completed
+          </label>
+        </li>
+      </a>
     </div>
   );
 };
