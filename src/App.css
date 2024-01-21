@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+
+.completed-task {
+  background-color: #e8f5e9; /* Light green background for completed tasks */
+  padding: 10px;
+  margin: 5px 0;
+}
